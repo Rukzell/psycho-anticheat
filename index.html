@@ -34,25 +34,43 @@
   /* ── Custom cursor ── */
   .cursor {
     position: fixed;
-    width: 8px; height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: width .15s, height .15s, background .15s;
+  }
+  .cursor-h, .cursor-v {
+    position: absolute;
+    background: var(--accent);
+    transition: opacity .15s;
+  }
+  /* horizontal line */
+  .cursor-h {
+    width: 16px; height: 1px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* vertical line */
+  .cursor-v {
+    width: 1px; height: 16px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  /* center gap */
+  .cursor-gap {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--bg);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
   }
   .cursor-ring {
     position: fixed;
-    width: 32px; height: 32px;
-    border: 1px solid rgba(255,60,60,.4);
-    border-radius: 50%;
+    width: 28px; height: 28px;
+    border: 1px solid rgba(255,60,60,.35);
     pointer-events: none;
     z-index: 9998;
     transform: translate(-50%, -50%);
-    transition: transform .08s ease, width .2s, height .2s;
   }
-  a:hover ~ .cursor, button:hover ~ .cursor { width: 14px; height: 14px; background: var(--accent2); }
 
   /* ── Noise overlay ── */
   body::before {
@@ -213,7 +231,7 @@
   .dot-r { background: #ff5f56; }
   .dot-y { background: #ffbd2e; }
   .dot-g { background: #27c93f; }
-  .terminal-body { padding: 1.2rem; line-height: 2; }
+  .terminal-body { padding: 1.2rem; line-height: 2; overflow: hidden; min-height: 180px; max-height: 180px; }
   .t-muted { color: var(--muted); }
   .t-green { color: #27c93f; }
   .t-red   { color: var(--accent); }
@@ -543,7 +561,11 @@
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
+<div class="cursor" id="cursor">
+  <div class="cursor-h"></div>
+  <div class="cursor-v"></div>
+  <div class="cursor-gap"></div>
+</div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="grid-bg"></div>
 
@@ -556,7 +578,7 @@
       <li><a href="#checks">Checks</a></li>
       <li><a href="#commands">Commands</a></li>
       <li><a href="#download">Download</a></li>
-      <li><a href="https://github.com/Rukzell/PsychoAnticheat" target="_blank">GitHub ↗</a></li>
+      <li><a href="https://github.com" target="_blank">GitHub ↗</a></li>
     </ul>
   </div>
 </nav>
@@ -584,15 +606,7 @@
           <div class="dot dot-g"></div>
           <span style="margin-left:.5rem;color:var(--muted);font-size:.65rem">psycho.log</span>
         </div>
-        <div class="terminal-body">
-          <div><span class="t-muted">[16:31:02]</span> <span class="t-green">Loaded model.bin</span></div>
-          <div><span class="t-muted">[16:31:02]</span> GRU(6, 32, 1) ready</div>
-          <div class="t-dim">────────────────────────</div>
-          <div><span class="t-muted">[16:45:13]</span> <span class="t-red">▶ xX_hacker_Xx</span></div>
-          <div><span class="t-muted">          </span> <span class="t-yellow">AimML</span> avg=<span class="t-red">99.71</span> VL <span class="t-red">6/5</span></div>
-          <div><span class="t-muted">[16:45:13]</span> executing ban...</div>
-          <div class="t-dim">────────────────────────</div>
-          <div><span class="t-muted">[16:45:14]</span> <span class="t-green">✓ banned</span></div>
+        <div class="terminal-body" id="terminalBody" style="min-height:160px">
         </div>
       </div>
     </div>
@@ -857,12 +871,12 @@
           <div class="dl-name">Psycho-1.0.jar</div>
           <div class="dl-meta">PAPER 1.16–1.21 · JAVA 17+ · ~120 KB</div>
         </div>
-        <a href="https://github.com/Rukzell/PsychoAnticheat" target="_blank" class="btn btn-primary">Download ↓</a>
+        <a href="https://github.com" target="_blank" class="btn btn-primary">Download ↓</a>
       </div>
     </div>
 
     <div class="reveal" style="margin-top:1rem">
-      <a href="https://github.com/Rukzell/PsychoAnticheat" target="_blank" class="btn btn-ghost">View source on GitHub ↗</a>
+      <a href="https://github.com" target="_blank" class="btn btn-ghost">View source on GitHub ↗</a>
     </div>
   </div>
 </section>
@@ -872,7 +886,7 @@
   <div class="wrap">
     <span class="footer-copy">© 2025 Psycho Anticheat — MIT License</span>
     <div class="footer-links">
-      <a href="https://github.com/Rukzell/PsychoAnticheat" target="_blank">GitHub</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
       <a href="#features">Features</a>
       <a href="#commands">Docs</a>
     </div>
@@ -890,8 +904,8 @@
   function animateCursor() {
     cursor.style.left = mx + 'px';
     cursor.style.top  = my + 'px';
-    rx += (mx - rx) * .12;
-    ry += (my - ry) * .12;
+    rx += (mx - rx) * .1;
+    ry += (my - ry) * .1;
     cursorRing.style.left = rx + 'px';
     cursorRing.style.top  = ry + 'px';
     requestAnimationFrame(animateCursor);
@@ -900,14 +914,16 @@
 
   document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      cursor.style.width = '14px';
-      cursor.style.height = '14px';
-      cursor.style.background = 'var(--accent2)';
+      cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+      cursor.style.opacity = '.6';
+      cursorRing.style.borderColor = 'rgba(255,122,0,.5)';
+      cursorRing.style.transform = 'translate(-50%, -50%) scale(1.3)';
     });
     el.addEventListener('mouseleave', () => {
-      cursor.style.width = '8px';
-      cursor.style.height = '8px';
-      cursor.style.background = 'var(--accent)';
+      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+      cursor.style.opacity = '1';
+      cursorRing.style.borderColor = 'rgba(255,60,60,.35)';
+      cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
     });
   });
 
@@ -955,6 +971,117 @@
 
   const statsRow = document.querySelector('.stats-row');
   if (statsRow) statsObs.observe(statsRow);
+
+  // ── Dynamic terminal ──
+  const termBody = document.getElementById('terminalBody');
+
+  const players = [
+    { name: 'xX_hacker_Xx',  check: 'AimML',          info: 'avg=99.71', vl: '6/5' },
+    { name: 'notlegit2025',   check: 'AimSpike',        info: 'spike=8.3', vl: '4/5' },
+    { name: 'freeaim_real',   check: 'KillAuraSnap',    info: 'snap=180°', vl: '5/5' },
+    { name: 'turboclicker',   check: 'KillAuraPattern', info: 'cps=23.0',  vl: '3/5' },
+    { name: 'inv_god99',      check: 'InventoryB',      info: 'delay=0ms', vl: '6/5' },
+    { name: 'sprintresetter', check: 'SprintB',         info: 'dt=48ms',   vl: '4/5' },
+    { name: 'aim_smooth_pro', check: 'AimSynthetic',    info: 'r=0.99',    vl: '5/5' },
+  ];
+
+  let logLines = [];
+  const MAX_LINES = 8;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function timestamp() {
+    const d = new Date();
+    return `[${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}]`;
+  }
+
+  function mkLine(html, cls = '') {
+    const div = document.createElement('div');
+    div.innerHTML = html;
+    if (cls) div.className = cls;
+    div.style.opacity = '0';
+    div.style.transform = 'translateY(4px)';
+    div.style.transition = 'opacity .3s, transform .3s';
+    return div;
+  }
+
+  function appendLine(html, cls) {
+    const line = mkLine(html, cls);
+    termBody.appendChild(line);
+    logLines.push(line);
+    requestAnimationFrame(() => {
+      line.style.opacity = '1';
+      line.style.transform = 'none';
+    });
+    if (logLines.length > MAX_LINES) {
+      const old = logLines.shift();
+      old.style.opacity = '0';
+      setTimeout(() => old.remove(), 300);
+    }
+    termBody.scrollTop = termBody.scrollHeight;
+  }
+
+  function appendDivider() {
+    appendLine(`<span class="t-dim">────────────────────────</span>`);
+  }
+
+  // Boot sequence
+  function bootSequence() {
+    const boot = [
+      { html: `<span class="t-muted">${timestamp()}</span> <span class="t-green">Psycho v0.0.3 loading...</span>`, delay: 0 },
+      { html: `<span class="t-muted">${timestamp()}</span> Loaded <span class="t-yellow">model.bin</span>`, delay: 400 },
+      { html: `<span class="t-muted">${timestamp()}</span> GRU(6, 32, 1) <span class="t-green">ready</span>`, delay: 800 },
+      { html: `<span class="t-muted">${timestamp()}</span> <span class="t-green">16 checks active</span>`, delay: 1200 },
+    ];
+    boot.forEach(({ html, delay }) => {
+      setTimeout(() => appendLine(html), delay);
+    });
+    setTimeout(() => {
+      appendDivider();
+      startLoop();
+    }, 1800);
+  }
+
+  // Detection loop
+  function buildVlBar(vl, maxVl) {
+    const total = Math.min(maxVl, 10);
+    const filled = Math.min(Math.round(vl / maxVl * total), total);
+    let bar = '';
+    for (let i = 0; i < total; i++) {
+      bar += i < filled
+        ? `<span style="color:#FF4500">|</span>`
+        : `<span style="color:#333">|</span>`;
+    }
+    return bar;
+  }
+
+  function fireDetection() {
+    const p = players[Math.floor(Math.random() * players.length)];
+    const [vlCur, vlMax] = p.vl.split('/').map(Number);
+    const bar = buildVlBar(vlCur, vlMax);
+    appendLine(
+      `<span class="t-muted">${timestamp()}</span> ` +
+      `<span style="color:#FF4500">[Psycho]</span> ` +
+      `<span style="color:#ff2020">${p.name}</span> ` +
+      `<span style="color:#FF4500">${p.check}</span> ` +
+      `${bar} ` +
+      `<span class="t-muted">${p.info}</span>`
+    );
+    setTimeout(() => {
+      appendLine(`<span class="t-muted">${timestamp()}</span> executing ban...`);
+    }, 400);
+    setTimeout(() => {
+      appendLine(`<span class="t-muted">${timestamp()}</span> <span class="t-green">✓ banned</span>`);
+      appendDivider();
+    }, 800);
+  }
+
+  function startLoop() {
+    fireDetection();
+    setInterval(fireDetection, 4500);
+  }
+
+  bootSequence();
+
 </script>
 </body>
 </html>
