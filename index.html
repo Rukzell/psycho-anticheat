@@ -458,7 +458,77 @@
   }
   .reveal.visible { opacity: 1; transform: none; }
 
-  /* ── Scrollbar ── */
+  /* ── Checks ── */
+  .checks-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+  .check-category { background: var(--bg); }
+  .check-cat-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .check-cat-label {
+    font-family: var(--mono);
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .check-cat-count {
+    font-family: var(--mono);
+    font-size: .65rem;
+    color: var(--muted);
+  }
+  .check-list { display: flex; flex-direction: column; }
+  .check-row {
+    display: grid;
+    grid-template-columns: 180px 90px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: .9rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .check-row:last-child { border-bottom: none; }
+  .check-row:hover { background: rgba(255,60,60,.03); }
+  .check-name {
+    font-family: var(--mono);
+    font-size: .78rem;
+    color: var(--text);
+  }
+  .check-badge {
+    font-family: var(--mono);
+    font-size: .6rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: .2rem .6rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+    align-self: center;
+  }
+  .check-badge-ml {
+    border-color: rgba(255,60,60,.4);
+    color: var(--accent);
+    background: rgba(255,60,60,.05);
+  }
+  .check-desc {
+    font-family: var(--mono);
+    font-size: .72rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .check-row { grid-template-columns: 1fr; gap: .4rem; }
+    .check-badge { display: inline-block; width: fit-content; }
+  }
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); }
@@ -483,6 +553,7 @@
     <a href="#" class="nav-logo">PSYCHO<span>.ac</span></a>
     <ul class="nav-links">
       <li><a href="#features">Features</a></li>
+      <li><a href="#checks">Checks</a></li>
       <li><a href="#commands">Commands</a></li>
       <li><a href="#download">Download</a></li>
       <li><a href="https://github.com" target="_blank">GitHub ↗</a></li>
@@ -602,6 +673,137 @@
 
 <div class="h-line"></div>
 
+<!-- CHECKS -->
+<section id="checks">
+  <div class="wrap">
+    <div class="section-label reveal">Coverage</div>
+    <h2 class="reveal">16 checks.<br>4 categories.</h2>
+    <p class="section-sub reveal">Every check runs independently with its own VL buffer, threshold and punishment command.</p>
+
+    <div class="checks-grid reveal">
+
+      <div class="check-category">
+        <div class="check-cat-header">
+          <span class="check-cat-label">Aim</span>
+          <span class="check-cat-count">8 checks</span>
+        </div>
+        <div class="check-list">
+          <div class="check-row">
+            <span class="check-name">AimML</span>
+            <span class="check-badge check-badge-ml">GRU</span>
+            <span class="check-desc">GRU neural network detecting aim assistance via rotation sequence analysis</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimAngleLocking</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Detects locking of one rotation axis, characteristic of aim assist snapping</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimConsistency</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Detects unnaturally consistent aim rotation patterns typical for aim assist</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimDistribution</span>
+            <span class="check-badge">statistical</span>
+            <span class="check-desc">Flags perfectly uniform rotation deltas characteristic of aim assist</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimDynamics</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Flags unnatural jerk patterns in aim rotation, typical of aim assist interpolation</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimFrequency</span>
+            <span class="check-badge">statistical</span>
+            <span class="check-desc">Flags unnatural rotation frequencies in aim, indicative of automated targeting</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimSpike</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Detects instant aim spikes typical of aim assist or aimbots</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">AimSynthetic</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Detects synthetic noise patterns in aim movement, typical of advanced aim assists</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-header">
+          <span class="check-cat-label">KillAura</span>
+          <span class="check-cat-count">3 checks</span>
+        </div>
+        <div class="check-list">
+          <div class="check-row">
+            <span class="check-name">KillAuraInvalid</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Attacking while eating or blocking</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">KillAuraPattern</span>
+            <span class="check-badge">statistical</span>
+            <span class="check-desc">Static click delay</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">KillAuraSnap</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Catches instant snap rotations towards targets on attack packets</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-header">
+          <span class="check-cat-label">Movement</span>
+          <span class="check-cat-count">3 checks</span>
+        </div>
+        <div class="check-list">
+          <div class="check-row">
+            <span class="check-name">SprintA</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Double sprint start/stop</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">SprintB</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Suspicious sprint start/stop delay</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">SprintC</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Start sprinting while eating or blocking</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-header">
+          <span class="check-cat-label">Inventory</span>
+          <span class="check-cat-count">2 checks</span>
+        </div>
+        <div class="check-list">
+          <div class="check-row">
+            <span class="check-name">InventoryA</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Click while sprinting</span>
+          </div>
+          <div class="check-row">
+            <span class="check-name">InventoryB</span>
+            <span class="check-badge">heuristic</span>
+            <span class="check-desc">Suspicious click delay</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="h-line"></div>
+
 <!-- COMMANDS -->
 <section id="commands">
   <div class="wrap">
@@ -625,28 +827,13 @@
             <td><span class="cmd-perm">psycho.admin</span></td>
           </tr>
           <tr>
-            <td class="cmd-name">/psycho collect &lt;label&gt;</td>
-            <td class="cmd-desc">Start recording your rotation data. Label: <code>cheat</code> or <code>legit</code>.</td>
-            <td><span class="cmd-perm">psycho.admin</span></td>
-          </tr>
-          <tr>
-            <td class="cmd-name">/psycho stop</td>
-            <td class="cmd-desc">Stop the active data collection session.</td>
+            <td class="cmd-name">/psycho collect &lt;player&gt; &lt;legit|cheat|stop&gt;</td>
+            <td class="cmd-desc">Start or stop recording rotation data for a player. Use <code>stop</code> to end the session.</td>
             <td><span class="cmd-perm">psycho.admin</span></td>
           </tr>
           <tr>
             <td class="cmd-name">/psycho reload</td>
             <td class="cmd-desc">Reload config files without restarting the server.</td>
-            <td><span class="cmd-perm">psycho.admin</span></td>
-          </tr>
-          <tr>
-            <td class="cmd-name">/psycho debug &lt;player&gt;</td>
-            <td class="cmd-desc">Show live probability output for a player in chat.</td>
-            <td><span class="cmd-perm">psycho.admin</span></td>
-          </tr>
-          <tr>
-            <td class="cmd-name">/psycho alerts</td>
-            <td class="cmd-desc">Toggle flag alerts for your session.</td>
             <td><span class="cmd-perm">psycho.admin</span></td>
           </tr>
         </tbody>
