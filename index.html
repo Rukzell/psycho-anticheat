@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Psycho — ML Anticheat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg:       #080808;
@@ -34,42 +34,29 @@
   /* ── Custom cursor ── */
   .cursor {
     position: fixed;
+    width: 6px; height: 6px;
+    background: var(--text);
+    border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-  }
-  .cursor-h, .cursor-v {
-    position: absolute;
-    background: var(--accent);
-    transition: opacity .15s;
-  }
-  /* horizontal line */
-  .cursor-h {
-    width: 16px; height: 1px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  /* vertical line */
-  .cursor-v {
-    width: 1px; height: 16px;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  /* center gap */
-  .cursor-gap {
-    position: absolute;
-    width: 4px; height: 4px;
-    background: var(--bg);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
+    transition: transform .1s, opacity .2s;
   }
   .cursor-ring {
     position: fixed;
-    width: 28px; height: 28px;
-    border: 1px solid rgba(255,60,60,.35);
+    width: 24px; height: 24px;
+    border: 1px solid rgba(232,232,232,.3);
+    border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
     transform: translate(-50%, -50%);
+    transition: width .25s, height .25s, border-color .25s, background .25s;
+  }
+  .cursor.hover { opacity: 0; }
+  .cursor-ring.hover {
+    width: 40px; height: 40px;
+    border-color: rgba(255,60,60,.6);
+    background: rgba(255,60,60,.06);
   }
 
   /* ── Noise overlay ── */
@@ -147,10 +134,11 @@
   }
 
   h1 {
-    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-size: clamp(2.8rem, 7vw, 6rem);
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     line-height: .95;
-    letter-spacing: -.02em;
+    letter-spacing: .01em;
     margin-bottom: 2rem;
     opacity: 0;
     animation: fadeUp .7s .35s forwards;
@@ -207,9 +195,9 @@
   /* Floating badge */
   .hero-badge {
     position: absolute;
-    right: 0; top: 38%;
+    right: -2rem; top: 38%;
     transform: translateY(-50%);
-    width: 340px;
+    width: 300px;
     opacity: 0;
     animation: fadeLeft .8s .8s forwards;
   }
@@ -250,9 +238,10 @@
   }
   h2 {
     font-size: clamp(2rem, 5vw, 3.5rem);
+    font-family: 'Barlow Condensed', sans-serif;
     font-weight: 800;
     line-height: 1.05;
-    letter-spacing: -.02em;
+    letter-spacing: .01em;
     margin-bottom: 1rem;
   }
   .section-sub {
@@ -561,11 +550,7 @@
 </head>
 <body>
 
-<div class="cursor" id="cursor">
-  <div class="cursor-h"></div>
-  <div class="cursor-v"></div>
-  <div class="cursor-gap"></div>
-</div>
+<div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="grid-bg"></div>
 
@@ -586,8 +571,9 @@
 <!-- HERO -->
 <section id="hero">
   <div class="wrap" style="width:100%">
+    <div style="max-width:520px">
     <div class="hero-eyebrow">Machine Learning Anticheat · Paper 1.16–1.21</div>
-    <h1>No rules.<br>No bypass.<br><em>No mercy.</em></h1>
+    <h1>Modern anticheat.<br><em>Free forever.</em></h1>
     <p class="hero-desc">
       Psycho uses a <strong>GRU neural network</strong> trained on real rotation data
       to detect aim assistance with &lt;0.01 false-positive rate.
@@ -596,6 +582,7 @@
     <div class="hero-actions">
       <a href="#download" class="btn btn-primary">↓ Download</a>
       <a href="#features" class="btn btn-ghost">See how it works</a>
+    </div>
     </div>
 
     <div class="hero-badge">
@@ -914,16 +901,12 @@
 
   document.querySelectorAll('a, button').forEach(el => {
     el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-      cursor.style.opacity = '.6';
-      cursorRing.style.borderColor = 'rgba(255,122,0,.5)';
-      cursorRing.style.transform = 'translate(-50%, -50%) scale(1.3)';
+      cursor.classList.add('hover');
+      cursorRing.classList.add('hover');
     });
     el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-      cursor.style.opacity = '1';
-      cursorRing.style.borderColor = 'rgba(255,60,60,.35)';
-      cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+      cursor.classList.remove('hover');
+      cursorRing.classList.remove('hover');
     });
   });
 
